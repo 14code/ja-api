@@ -9,6 +9,11 @@
             "email": "dh@14co.de"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "I4code\\JaApi\\": "src/"
+        }
+    },
     "prefer-stable": true,
     "require": {
         "nyholm/psr7": "^1.2",
