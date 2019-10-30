@@ -18,17 +18,10 @@ class ServiceTest extends TestCase
 
     public function testDispatch()
     {
+        $serverRequest = (new ServerRequestFactory())->createTestRequest("GET", '/');
         $service = new Service();
-
-        $service->get('/hallo', function () {
-            echo 'hallo';
-        });
-
-        $serverRequestFactory = new ServerRequestFactory();
-        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/hallo');
         $response = $service->dispatch($serverRequest);
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertSame('hallo', (string) $response->getBody());
     }
 
 }

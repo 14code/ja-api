@@ -91,20 +91,39 @@ class Service
     }
 
 
-    public function dispatch(ServerRequestInterface $serverRequest)
+    /**
+     * @return array
+     */
+    public function createMiddlewareStack()
+    {
+        return array_merge(
+            [new FastRoute($this->createRouter())],
+            $this->middlewares,
+            [new RequestHandler()]);
+    }
+
+
+    /**
+     * @return \FastRoute\Dispatcher
+     */
+    public function createRouter()
     {
         $routes = $this->getRoutes();
-        $router = simpleDispatcher(function (RouteCollector $r) use ($routes) {
+        return simpleDispatcher(function (RouteCollector $r) use ($routes) {
             foreach ($routes as $route) {
                 $r->addRoute($route->getMethod(), $route->getRoute(), $route->getHandler());
             }
         });
+    }
 
-        $dispatcher = new Dispatcher([
-            new FastRoute($router),
-            new RequestHandler()
-        ]);
 
+    /**
+     * @param ServerRequestInterface $serverRequest
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function dispatch(ServerRequestInterface $serverRequest)
+    {
+        $dispatcher = new Dispatcher($this->createMiddlewareStack());
         return $dispatcher->dispatch($serverRequest);
     }
 
