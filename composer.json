@@ -20,7 +20,8 @@
         "nyholm/psr7-server": "^0.3.0",
         "zendframework/zend-httphandlerrunner": "^1.1",
         "middlewares/fast-route": "^1.2",
-        "middlewares/request-handler": "^1.4"
+        "middlewares/request-handler": "^1.4",
+        "symfony/serializer": "^4.3"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.4"
