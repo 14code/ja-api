@@ -22,20 +22,32 @@ abstract class FileGateway implements Gateway
     }
 
 
-    public function getSrcString(): string
+    public function getSrcString()
     {
         $srcString = file_get_contents($this->srcFile);
         return $srcString;
     }
 
 
-    public function getDecoded(): array
+    public function putSrcString(string $string)
     {
-        $decoded = $this->encoder->decode($this->getSrcString());
-        return $decoded;
+        file_put_contents($this->srcFile, $string);
+    }
+
+
+    public function getDecoded()
+    {
+        return $this->encoder->decode($this->getSrcString());
+    }
+
+
+    public function getEncoded(array $data)
+    {
+        return $this->encoder->encode($data);
     }
 
 
     abstract public function retrieveAll(): array;
+    abstract public function persist(array $data);
 
 }

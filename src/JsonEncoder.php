@@ -15,8 +15,7 @@ class JsonEncoder implements Encoder
 
     public function encode(array $data): string
     {
-        $encoded = '';
-        return $encoded;
+        return $this->encoder->encode($data, 'json');
     }
 
 
