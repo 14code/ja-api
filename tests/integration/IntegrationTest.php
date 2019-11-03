@@ -11,23 +11,51 @@ use Nyholm\Psr7\Response;
 class IntegrationTest extends TestCase
 {
 
-    public function testService()
+    public function testValidEndpoint()
     {
         $service = new Service();
-
-        $service->addMiddleware(new JsonMiddleware());
-
-        $service->get('/hallo', function () {
-            echo '[xxx]';
+        //$service->addMiddleware(new JsonMiddleware());
+        $service->get('/test', function () {
+            echo json_encode(['data' => 'test value']);
         });
 
+        //fwrite(STDERR, __METHOD__ . "\n");
         $serverRequestFactory = new ServerRequestFactory();
-        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/hallo');
+        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/test');
         $response = $service->dispatch($serverRequest);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(200, $response->getStatusCode());
         $this->assertSame('application/json', current($response->getHeader('Content-Type')));
-        $this->assertJson((string) $response->getBody());
+
+        $body = (string) $response->getBody();
+        $this->assertJson($body);
+
+        $fromJson = json_decode($body);
+        $this->assertObjectHasAttribute('data', $fromJson);
+    }
+
+
+    public function testInvalidEndpoint()
+    {
+        $service = new Service();
+        //$service->addMiddleware(new JsonMiddleware());
+        $service->get('/test', function () {
+            echo json_encode(['test' => 'test value']);
+        });
+
+        //fwrite(STDERR, __METHOD__ . "\n");
+        $serverRequestFactory = new ServerRequestFactory();
+        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/invalid');
+        $response = $service->dispatch($serverRequest);
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame(404, $response->getStatusCode());
+        $this->assertSame('application/json', current($response->getHeader('Content-Type')));
+
+        $body = (string) $response->getBody();
+        $this->assertJson($body);
+
+        $fromJson = json_decode($body);
+        $this->assertObjectHasAttribute('errors', $fromJson);
     }
 
 }
