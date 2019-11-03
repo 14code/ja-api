@@ -5,6 +5,7 @@ use I4code\JaApi\Middlewares\JsonMiddleware;
 use PHPUnit\Framework\TestCase;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
+use I4code\JaApi\Controllers\DefaultController;
 use Nyholm\Psr7\Response;
 
 
@@ -18,10 +19,11 @@ class IntegrationTest extends TestCase
         $service->get('/test', function () {
             echo json_encode(['data' => 'test value']);
         });
+        $service->get('/hallo', DefaultController::class);
 
         //fwrite(STDERR, __METHOD__ . "\n");
         $serverRequestFactory = new ServerRequestFactory();
-        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/test');
+        $serverRequest = $serverRequestFactory->createTestRequest("GET", '/hallo');
         $response = $service->dispatch($serverRequest);
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(200, $response->getStatusCode());
