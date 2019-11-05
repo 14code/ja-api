@@ -8,6 +8,7 @@ use I4code\JaApi\Middlewares\JsonMiddleware;
 use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
 use Middlewares\Utils\Dispatcher;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -17,6 +18,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class Service
 {
+    protected $container;
     protected $middlewares = [];
     protected $routes = [];
 
@@ -78,6 +80,24 @@ class Service
         return $this->routes;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @return Service
+     */
+    public function setContainer(ContainerInterface $container)
+    {
+        $this->container = $container;
+        return $this;
+    }
+
 
     public function addMiddleware(MiddlewareInterface $middleware)
     {
@@ -104,7 +124,7 @@ class Service
             [new Middlewares\EnforceJsonMiddleware()],
             [new FastRoute($this->createRouter())],
             $this->middlewares,
-            [new RequestHandler()]);
+            [new RequestHandler($this->getContainer())]);
     }
 
 
