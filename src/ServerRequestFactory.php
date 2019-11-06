@@ -7,8 +7,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 
-require_once dirname(__DIR__) . "/vendor/autoload.php";
-
 
 class ServerRequestFactory
 {
