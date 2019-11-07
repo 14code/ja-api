@@ -28,7 +28,7 @@ class EnforceJsonMiddleware implements MiddlewareInterface
         if (404 == $response->getStatusCode()) {
             $errors[] = (object)[
                 'code' => 100,
-                'http-status' => 404,
+                'status' => 404,
                 'message' => 'Ressource not found'
             ];
         }
@@ -36,17 +36,21 @@ class EnforceJsonMiddleware implements MiddlewareInterface
         $body = (string)$bodyStream;
 
         if (empty($body)) {
+            $status = 404;
+            $response = $response->withStatus($status);
             $errors[] = (object)[
                 'code' => 201,
-                'http-status' => 505,
+                'status' => $status,
                 'message' => 'Empty JSON result'
             ];
         } else {
             json_decode((string)$response->getBody());
             if (0 !== json_last_error()) {
+                $status = 500;
+                $response = $response->withStatus($status);
                 $errors[] = (object)[
                     'code' => 202,
-                    'http-status' => 506,
+                    'status' => $status,
                     'message' => 'Invalid JSON result: ' . json_last_error()
                         . ' / ' . json_last_error_msg()
                 ];
