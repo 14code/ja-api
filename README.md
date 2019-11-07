@@ -15,3 +15,8 @@ https://github.com/nikic/FastRoute
 
 https://github.com/relayphp/Relay.Relay  
 https://github.com/sunrise-php/http-router  
+
+### Specifications
+
+https://jsonapi.org/  
+https://github.com/json-api/json-api  
