@@ -1,7 +1,7 @@
 # 14code/ja-api
 ## Just another API...
 
-Skeleton for setting up Microservices / REST APIs
+Skeleton for setting up PHP Microservices / REST APIs
 
 ## Inspiration links
 
