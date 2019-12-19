@@ -8,7 +8,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
-class ReturnPayloadController
+class ReturnPayloadController implements ControllerInterface
 {
 
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $handler)
