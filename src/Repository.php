@@ -56,7 +56,11 @@ abstract class Repository
         $items = [];
 
         foreach ($results as $result) {
-            $item = $this->factory->createFromArray($result);
+            if (is_array($result)) {
+                $item = $this->factory->createFromArray($result);
+            } else {
+                $item = $this->factory->create($result);
+            }
             $items[] = $item;
         }
 
