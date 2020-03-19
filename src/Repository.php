@@ -29,7 +29,7 @@ abstract class Repository
     public function getRepository()
     {
         if (null === $this->repository) {
-            $this->findAll();
+            $this->setRepository($this->findAll());
         }
         return $this->repository;
     }
@@ -45,22 +45,22 @@ abstract class Repository
     }
 
 
-    public function findAll(): Repository
+    public function findAll(): array
     {
-        $this->repository = [];
-
         $results = $this->gateway->retrieveAll();
 
         if (!is_array($results)) {
             throw new InvalidResultsetException("Resultset is " . gettype($results) . " instead of array");
         }
 
+        $items = [];
+
         foreach ($results as $result) {
             $item = $this->factory->createFromArray($result);
-            $this->repository[] = $item;
+            $items[] = $item;
         }
 
-        return $this;
+        return $items;
     }
 
 }
