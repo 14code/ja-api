@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
+namespace Tests\Integration;
+
+use I4code\JaApi\Controllers\DefaultController;
 use I4code\JaApi\Middlewares\JsonMiddleware;
-use PHPUnit\Framework\TestCase;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
-use I4code\JaApi\Controllers\DefaultController;
 use Nyholm\Psr7\Response;
+use PHPUnit\Framework\TestCase;
 
 
 class IntegrationTest extends TestCase

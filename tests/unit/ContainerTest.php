@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
 
-include_once 'tests/assets/classes/TestClass.php';
+namespace Tests\Unit;
 
+use Closure;
 use I4code\JaApi\Container;
 use PHPUnit\Framework\TestCase;
 use Tests\Assets\Classes\TestClass;
