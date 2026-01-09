@@ -33,7 +33,7 @@ class IntegrationTest extends TestCase
         $this->assertJson($body);
 
         $fromJson = json_decode($body);
-        $this->assertObjectHasAttribute('data', $fromJson);
+        $this->assertObjectHasProperty('data', $fromJson);
     }
 
 
@@ -57,7 +57,7 @@ class IntegrationTest extends TestCase
         $this->assertJson($body);
 
         $fromJson = json_decode($body);
-        $this->assertObjectHasAttribute('errors', $fromJson);
+        $this->assertObjectHasProperty('errors', $fromJson);
     }
 
 }
