@@ -1,16 +1,15 @@
 <?php
 declare(strict_types=1);
 
-include_once 'tests/assets/classes/TestController.php';
-include_once 'tests/assets/classes/TestClass.php';
+namespace Tests\Integration;
 
 use I4code\JaApi\Container as DI;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Tests\Assets\Classes\TestController;
-use Tests\Assets\Classes\TestClass;
+use TestClass;
+use TestController;
 
 class DiServiceTest extends TestCase
 {

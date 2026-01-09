@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Assets\Classes;
-
 class TestClass
 {
     private $value1;

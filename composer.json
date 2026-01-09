@@ -14,6 +14,18 @@
             "I4code\\JaApi\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        },
+        "exclude-from-classmap": [
+            "tests/assets/"
+        ],
+        "files": [
+            "tests/assets/classes/TestClass.php",
+            "tests/assets/classes/TestController.php"
+        ]
+    },
     "prefer-stable": true,
     "require": {
         "nyholm/psr7": "^1.2",

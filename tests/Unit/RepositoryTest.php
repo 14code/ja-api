@@ -1,7 +1,11 @@
 <?php
+declare(strict_types=1);
 
-namespace I4code\JaApi;
+namespace Tests\Unit;
 
+use I4code\JaApi\Factory;
+use I4code\JaApi\Gateway;
+use I4code\JaApi\Repository;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
