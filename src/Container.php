@@ -16,7 +16,7 @@ class Container implements ContainerInterface
     }
 
 
-    public function has($id)
+    public function has(string $id): bool
     {
         return isset($this->definitions[$id]);
     }
