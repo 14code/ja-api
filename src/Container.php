@@ -39,17 +39,15 @@ class Container implements ContainerInterface
     }
 
 
-    public static function new(string $class, array $constructorArgs = [])
+    public static function new(string $class, array $constructorArgs = []): callable
     {
+        return function (ContainerInterface $container) use ($class, $constructorArgs) {
+            $resolved = array_map(
+                static fn($arg) => is_callable($arg) ? $arg($container) : $arg,
+                $constructorArgs
+            );
 
-        return function (ContainerInterface $container, ...$runtimeArgs) use ($class, $constructorArgs) {
-            $resolved = array_map(function ($arg) use ($container) {
-                return is_callable($arg) ? $arg($container) : $arg;
-            }, $constructorArgs);
-
-            $instance = new $class(...$resolved);
-            
-            return is_callable($instance) ? $instance(...$runtimeArgs) : $instance;
+            return new $class(...$resolved);
         };
     }
 
