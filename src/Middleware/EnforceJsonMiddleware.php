@@ -15,8 +15,6 @@ class EnforceJsonMiddleware implements MiddlewareInterface
     {
         $response = $handler->handle($request);
 
-        //$requestHandler = $request->getAttribute($this->handlerAttribute);
-
         if ('application/json' != $response->getHeader('Content-Type')) {
             $response = $response->withHeader("Content-Type", "application/json");
         }
@@ -63,10 +61,6 @@ class EnforceJsonMiddleware implements MiddlewareInterface
                 'errors' => $errors
             ]));
         }
-
-        //$body = (string) $response->getBody();
-        //fwrite(STDERR, 'body:' . "\n");
-        //fwrite(STDERR, print_r($body, true));
 
         return $response;
 
