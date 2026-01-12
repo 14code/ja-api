@@ -49,10 +49,7 @@ class ContainerTest extends TestCase
             $class => Container::new($class, ['value1', 'value2'])
         ]);
 
-        $constructor = $container->get($class);
-        $this->assertInstanceOf(Closure::class, $constructor);
-
-        $instance = $constructor();
+        $instance = $container->get($class);
         $this->assertInstanceOf($class, $instance);
 
     }
@@ -61,12 +58,11 @@ class ContainerTest extends TestCase
     public function testNew()
     {
         $class = TestClass::class;
+        $container = new Container();
         $constructor = Container::new($class, ['value1', 'value2']);
-        //fwrite(STDERR, print_r($constructor, true));
         $this->assertInstanceOf(Closure::class, $constructor);
 
-        $instance = $constructor('hallo', 'sonne');
-        //fwrite(STDERR, print_r($instance, true));
+        $instance = $constructor($container);
         $this->assertInstanceOf($class, $instance);
     }
 
