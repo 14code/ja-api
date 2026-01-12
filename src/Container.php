@@ -24,31 +24,32 @@ class Container implements ContainerInterface
 
     public function get($id, array $args = [])
     {
-        if ($this->has($id)) {
-            $runner = $this->definitions[$id];
-            return $runner;
+        if (!$this->has($id)) {
+            return null; // oder Exception
         }
-        return null;
+
+        $entry = $this->definitions[$id];
+
+        if (is_callable($entry)) {
+            // First argument is container to make deps available
+            return $entry($this, ...$args);
+        }
+
+        return $entry;
     }
 
 
     public static function new(string $class, array $constructorArgs = [])
     {
 
-        return function () use ($class, $constructorArgs) {
-            $constructorArgs = array_map(function ($arg) {
-                if (is_callable($arg)) {
-                    return $arg();
-                }
-                return $arg;
+        return function (ContainerInterface $container, ...$runtimeArgs) use ($class, $constructorArgs) {
+            $resolved = array_map(function ($arg) use ($container) {
+                return is_callable($arg) ? $arg($container) : $arg;
             }, $constructorArgs);
 
-            $instance = new $class(...$constructorArgs);
-            if (is_callable($instance)) {
-                $args = func_get_args();
-                return $instance(...$args);
-            }
-            return $instance;
+            $instance = new $class(...$resolved);
+            
+            return is_callable($instance) ? $instance(...$runtimeArgs) : $instance;
         };
     }
 
