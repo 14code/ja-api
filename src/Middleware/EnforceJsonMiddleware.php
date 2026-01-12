@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace I4code\JaApi\Middlewares;
+namespace I4code\JaApi\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

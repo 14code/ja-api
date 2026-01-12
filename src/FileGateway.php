@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace I4code\JaApi;
 
-use I4code\JaApi\Exceptions\NoDatasourceException;
+use I4code\JaApi\Exception\NoDatasourceException;
 
 abstract class FileGateway implements Gateway
 {

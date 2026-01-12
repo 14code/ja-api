@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace I4code\JaApi;
 
 use FastRoute\RouteCollector;
-use I4code\JaApi\Middlewares\JsonMiddleware;
+use I4code\JaApi\Middleware\JsonMiddleware;
 use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
 use Middlewares\Utils\Dispatcher;
@@ -121,7 +121,7 @@ class Service
     public function createMiddlewareStack()
     {
         return array_merge(
-            [new Middlewares\EnforceJsonMiddleware()],
+            [new Middleware\EnforceJsonMiddleware()],
             [new FastRoute($this->createRouter())],
             $this->middlewares,
             [new RequestHandler($this->getContainer())]);

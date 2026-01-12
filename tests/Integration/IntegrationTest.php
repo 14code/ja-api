@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use I4code\JaApi\Controllers\DefaultController;
-use I4code\JaApi\Middlewares\JsonMiddleware;
+use I4code\JaApi\Controller\DefaultController;
+use I4code\JaApi\Middleware\JsonMiddleware;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
 use Nyholm\Psr7\Response;

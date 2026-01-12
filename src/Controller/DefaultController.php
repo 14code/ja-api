@@ -1,20 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace I4code\JaApi\Controllers;
+namespace I4code\JaApi\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 
-class ReturnPayloadController implements ControllerInterface
+class DefaultController implements ControllerInterface
 {
 
     public function __invoke(ServerRequestInterface $request, RequestHandlerInterface $handler)
     {
-        $body = (string) $request->getBody();
-        echo $body;
+        echo json_encode(['data' => 'test value']);
     }
 
 }

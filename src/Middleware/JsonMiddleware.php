@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace I4code\JaApi\Middlewares;
+namespace I4code\JaApi\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseInterface;
 
-use I4code\JaApi\Exceptions\NoValidJsonResponseException;
+use I4code\JaApi\Exception\NoValidJsonResponseException;
 
 
 class JsonMiddleware implements MiddlewareInterface

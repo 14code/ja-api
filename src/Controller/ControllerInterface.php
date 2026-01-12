@@ -1,5 +1,5 @@
 <?php
-namespace I4code\JaApi\Controllers;
+namespace I4code\JaApi\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
