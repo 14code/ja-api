@@ -16,9 +16,12 @@ use function FastRoute\simpleDispatcher;
 
 class Service
 {
-    protected $container;
     protected $middlewares = [];
     protected $routes = [];
+    
+    public function __construct(
+        protected ContainerInterface $container
+    ) {}
 
 
     public function delete($route, $handler)

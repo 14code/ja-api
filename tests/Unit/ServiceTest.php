@@ -7,13 +7,15 @@ use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 
 class ServiceTest extends TestCase
 {
 
     public function testContructor()
     {
-        $service = new Service();
+        $container = $this->createMock(ContainerInterface::class);
+        $service = new Service($container);
         $this->assertInstanceOf(Service::class, $service);
     }
 
@@ -21,7 +23,8 @@ class ServiceTest extends TestCase
     public function testDispatch()
     {
         $serverRequest = (new ServerRequestFactory())->createTestRequest("GET", '/');
-        $service = new Service();
+        $container = $this->createMock(ContainerInterface::class);
+        $service = new Service($container);
         $response = $service->dispatch($serverRequest);
         $this->assertInstanceOf(Response::class, $response);
     }

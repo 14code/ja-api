@@ -1,18 +1,19 @@
 <?php
+declare(strict_types=1);
 
 namespace I4code\JaApi\Handler;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class OptionsHandler extends RequestHandler
+
+class ReturnPayloadHandler extends RequestHandler
 {
 
-    /**
-     * @inheritDoc
-     */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->createResponse(204);
+        $body = (string) $request->getBody();
+        return $this->createResponse(200, $body);
     }
+
 }

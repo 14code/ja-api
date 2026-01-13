@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
-use I4code\JaApi\Controller\DefaultController;
-use I4code\JaApi\Middleware\JsonMiddleware;
+use I4code\JaApi\Container;
+use I4code\JaApi\Factory\HttpFactory;
+use I4code\JaApi\Handler\DefaultHandler;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
@@ -16,14 +18,24 @@ class IntegrationTest extends TestCase
 
     public function testValidEndpoint()
     {
-        $service = new Service();
-        //$service->addMiddleware(new JsonMiddleware());
+        $psr17Factory = new Psr17Factory();
+
+        $container = new Container();
+        $container->set([
+            HttpFactory::class => Container::new(HttpFactory::class, [$psr17Factory]),
+        ])->set([
+            DefaultHandler::class => Container::new(DefaultHandler::class, [
+                $container->get(HttpFactory::class)
+            ]),
+        ]);
+
+        $service = new Service($container);
+        
         $service->get('/test', function () {
             echo json_encode(['data' => 'test value']);
         });
-        $service->get('/hallo', DefaultController::class);
+        $service->get('/hallo', DefaultHandler::class);
 
-        //fwrite(STDERR, __METHOD__ . "\n");
         $serverRequestFactory = new ServerRequestFactory();
         $serverRequest = $serverRequestFactory->createTestRequest("GET", '/hallo');
         $response = $service->dispatch($serverRequest);
@@ -41,8 +53,9 @@ class IntegrationTest extends TestCase
 
     public function testInvalidEndpoint()
     {
-        $service = new Service();
-        //$service->addMiddleware(new JsonMiddleware());
+        $container = new Container();
+        $service = new Service($container);
+        
         $service->get('/test', function () {
             echo json_encode(['test' => 'test value']);
         });

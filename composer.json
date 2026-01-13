@@ -23,7 +23,7 @@
         ],
         "files": [
             "tests/assets/classes/TestClass.php",
-            "tests/assets/classes/TestController.php"
+            "tests/assets/classes/TestHandler.php"
         ]
     },
     "prefer-stable": true,

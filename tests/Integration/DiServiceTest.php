@@ -4,33 +4,38 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use I4code\JaApi\Container as DI;
+use I4code\JaApi\Factory\HttpFactory;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use TestClass;
-use TestController;
+use TestHandler;
 
 class DiServiceTest extends TestCase
 {
 
     public function testDi()
     {
-        $class = TestController::class;
-
-        $service = new Service();
-        $service->get('/ditest', $class);
+        $psr17Factory = new Psr17Factory();
+        $class = TestHandler::class;
 
         $container = new DI();
         $container->set([
             TestClass::class => DI::new(TestClass::class, ['value1', 'value2'])
         ]);
         $container->set([
-            TestController::class => DI::new(TestController::class, [
+            HttpFactory::class => DI::new(HttpFactory::class, [$psr17Factory])
+        ])->set([
+            TestHandler::class => DI::new(TestHandler::class, [
+                $container->get(HttpFactory::class),
                 $container->get(TestClass::class)
             ])
         ]);
-        $service->setContainer($container);
+
+        $service = new Service($container);
+        $service->get('/ditest', $class);
 
         $serverRequestFactory = new ServerRequestFactory();
         $serverRequest = $serverRequestFactory->createTestRequest("GET", '/ditest');

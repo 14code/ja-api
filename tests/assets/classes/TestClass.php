@@ -12,14 +12,4 @@ class TestClass
         $this->value2 = $parameter2;
     }
 
-/*
-    public function __invoke($arg1, $arg2)
-    {
-        return [
-            $this->value1 . $arg1,
-            $this->value2 . $arg2
-        ];
-    }
-*/
-
 }
