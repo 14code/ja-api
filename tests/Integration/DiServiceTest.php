@@ -4,7 +4,10 @@ declare(strict_types=1);
 namespace Tests\Integration;
 
 use I4code\JaApi\Container as DI;
+use I4code\JaApi\CorsConfig;
 use I4code\JaApi\Factory\HttpFactory;
+use I4code\JaApi\Handler\OptionsHandler;
+use I4code\JaApi\Middleware\CorsMiddleware;
 use I4code\JaApi\ServerRequestFactory;
 use I4code\JaApi\Service;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -32,6 +35,8 @@ class DiServiceTest extends TestCase
                 $container->get(HttpFactory::class),
                 $container->get(TestClass::class)
             ])
+        ])->set([
+            CorsMiddleware::class => DI::new(CorsMiddleware::class, [new OptionsHandler($container->get(HttpFactory::class)), new CorsConfig()])
         ]);
 
         $service = new Service($container);

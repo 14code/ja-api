@@ -5,6 +5,8 @@ namespace I4code\JaApi;
 
 use FastRoute\RouteCollector;
 use I4code\JaApi\Middleware\CorsMiddleware;
+use I4code\JaApi\Middleware\EnforceJsonMiddleware;
+use LogicException;
 use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
 use Middlewares\Utils\Dispatcher;
@@ -121,12 +123,27 @@ class Service
      */
     public function createMiddlewareStack()
     {
+        $container = $this->getContainer();
+        $middlewares = [];
+        
+        $middlewareIds = [
+            CorsMiddleware::class,
+            EnforceJsonMiddleware::class,
+        ];
+        
+        foreach ($middlewareIds as $middlewareId) {
+            $middleware = $this->resolveMiddleware($middlewareId);
+            if ($middleware instanceof MiddlewareInterface) {
+                $middlewares[] = $middleware;
+            }
+        }
+        
         return array_merge(
-            [new CorsMiddleware()],
-            [new Middleware\EnforceJsonMiddleware()],
+            $middlewares,
             [new FastRoute($this->createRouter())],
             $this->middlewares,
-            [new RequestHandler($this->getContainer())]);
+            [new RequestHandler($container)]
+        );
     }
 
 
@@ -152,6 +169,34 @@ class Service
     {
         $dispatcher = new Dispatcher($this->createMiddlewareStack());
         return $dispatcher->dispatch($serverRequest);
+    }
+
+
+    protected function resolveMiddleware(string $id): MiddlewareInterface
+    {
+        $container = $this->getContainer();
+        
+        if ($container && $container->has($id)) {
+            $middleware = $container->get($id);
+            
+            if (! $middleware instanceof MiddlewareInterface) {
+                throw new LogicException("Container entry [$id] is not a MiddlewareInterface.");
+            }
+            
+            return $middleware;
+        }
+
+        if (! class_exists($id)) {
+            throw new LogicException("Middleware class [$id] not found and not registered in container.");
+        }
+        
+        $middleware = new $id();
+        
+        if (! $middleware instanceof MiddlewareInterface) {
+            throw new LogicException("Class [$id] does not implement MiddlewareInterface.");
+        }
+        
+        return $middleware;
     }
 
 }

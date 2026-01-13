@@ -2,9 +2,7 @@
 
 namespace I4code\JaApi\Middleware;
 
-use I4code\JaApi\Factory\HttpFactory;
-use I4code\JaApi\Handler\OptionsHandler;
-use Nyholm\Psr7\Factory\Psr17Factory;
+use I4code\JaApi\CorsConfig;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -12,16 +10,27 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CorsMiddleware implements MiddlewareInterface
 {
+    
+    public function __construct(
+        protected RequestHandlerInterface $optionsHandler,
+        protected CorsConfig $corsConfig
+    ) {}
 
     /**
      * @inheritDoc
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        $method = strtoupper($request->getMethod());
+
+        $isPreflight =
+            $method === 'OPTIONS'
+            && $request->hasHeader('Origin')
+            && $request->hasHeader('Access-Control-Request-Method');
+        
         // Preflight
-        if (strtoupper($request->getMethod()) === 'OPTIONS') {
-            $httpFactory = new HttpFactory(new Psr17Factory());
-            $response = (new OptionsHandler($httpFactory))->handle($request);
+        if ($isPreflight) {
+            $response = $this->optionsHandler->handle($request);
             return $this->withCorsHeaders($response);
         }
 
